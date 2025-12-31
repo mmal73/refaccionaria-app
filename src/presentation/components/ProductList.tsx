@@ -12,9 +12,10 @@ import type { ProductResponseDTO } from '../../application';
 interface ProductListProps {
   products: ProductResponseDTO[];
   isLoading?: boolean;
+  onAddToCart?: (product: ProductResponseDTO) => void;
 }
 
-export const ProductList: React.FC<ProductListProps> = ({ products, isLoading }) => {
+export const ProductList: React.FC<ProductListProps> = ({ products, isLoading, onAddToCart }) => {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -44,7 +45,11 @@ export const ProductList: React.FC<ProductListProps> = ({ products, isLoading })
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {products.map(product => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard 
+          key={product.id} 
+          product={product} 
+          onAddToCart={onAddToCart}
+        />
       ))}
     </div>
   );

@@ -7,3 +7,4 @@ export { ProductCard } from './ProductCard';
 export { ProductList } from './ProductList';
 export { StockMovementModal } from './StockMovementModal';
 export { StockHistoryTable } from './StockHistoryTable';
+export { ReceiptModal } from './ReceiptModal';

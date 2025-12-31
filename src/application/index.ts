@@ -22,4 +22,6 @@ export {
   UpdateStockUseCase,
   GetLowStockProductsUseCase,
   GetStockMovementsUseCase,
+  CreateSaleUseCase,
+  GetInventoryStatsUseCase,
 } from './use-cases';
