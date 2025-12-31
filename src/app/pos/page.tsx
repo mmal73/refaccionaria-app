@@ -7,7 +7,8 @@ import {
   POSHeader, 
   POSCatalog, 
   POSCart, 
-  POSPaymentPanel 
+  POSPaymentPanel,
+  POSProvider
 } from '../../presentation/components/pos';
 
 /**
@@ -15,6 +16,14 @@ import {
  * Ensambla la lógica y los componentes presentacionales.
  */
 export default function POSPage() {
+  return (
+    <POSProvider>
+      <POSContent />
+    </POSProvider>
+  );
+}
+
+function POSContent() {
   const {
     products,
     searchTerm,

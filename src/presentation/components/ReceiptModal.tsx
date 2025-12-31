@@ -1,26 +1,11 @@
 import React from 'react';
 import { formatDate, formatMoney } from '../../shared/utils/formatters';
-
-interface ReceiptItem {
-  productName: string;
-  quantity: number;
-  unitPrice: number;
-  subtotal: number;
-}
-
-interface ReceiptData {
-  saleId: string;
-  date: Date;
-  customerName?: string;
-  items: ReceiptItem[];
-  total: number;
-  currency: string;
-}
+import type { ReceiptDTO } from '../../application';
 
 interface ReceiptModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data: ReceiptData | null;
+  data: ReceiptDTO | null;
 }
 
 export const ReceiptModal: React.FC<ReceiptModalProps> = ({ isOpen, onClose, data }) => {
