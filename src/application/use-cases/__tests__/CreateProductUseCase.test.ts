@@ -1,31 +1,31 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+import { describe, it, expect , vi, beforeEach } from 'vitest';
 import { CreateProductUseCase } from '../CreateProductUseCase';
 import type { IProductRepository, IImageService, UploadImageResult } from '../../../domain';
 import type { CreateProductDTO } from '../../dtos';
 
 describe('CreateProductUseCase', () => {
   let useCase: CreateProductUseCase;
-  let mockProductRepository: jest.Mocked<IProductRepository>;
-  let mockImageService: jest.Mocked<IImageService>;
+  let mockProductRepository: Mock<IProductRepository>;
+  let mockImageService: Mock<IImageService>;
 
   beforeEach(() => {
     // Create mock implementations
     mockProductRepository = {
-      save: jest.fn(),
-      findById: jest.fn(),
-      findAll: jest.fn(),
-      findByCategory: jest.fn(),
-      findLowStock: jest.fn(),
-      findOutOfStock: jest.fn(),
-      searchByName: jest.fn(),
-      delete: jest.fn(),
-      exists: jest.fn(),
+      save: vi.fn(),
+      findById: vi.fn(),
+      findAll: vi.fn(),
+      findByCategory: vi.fn(),
+      findLowStock: vi.fn(),
+      findOutOfStock: vi.fn(),
+      searchByName: vi.fn(),
+      delete: vi.fn(),
+      exists: vi.fn(),
     } as any;
 
     mockImageService = {
-      upload: jest.fn(),
-      delete: jest.fn(),
-      getUrl: jest.fn(),
+      upload: vi.fn(),
+      delete: vi.fn(),
+      getUrl: vi.fn(),
     } as any;
 
     useCase = new CreateProductUseCase(mockProductRepository, mockImageService);

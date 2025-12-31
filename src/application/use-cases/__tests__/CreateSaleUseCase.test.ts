@@ -1,4 +1,4 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+import { describe, it, expect , vi, beforeEach } from 'vitest';
 import { CreateSaleUseCase, type CreateSaleDTO } from '../CreateSaleUseCase';
 import { 
   type ISaleRepository, 
@@ -10,14 +10,14 @@ import {
 
 describe('CreateSaleUseCase', () => {
   let useCase: CreateSaleUseCase;
-  let mockSaleRepo: jest.Mocked<ISaleRepository>;
-  let mockProductRepo: jest.Mocked<IProductRepository>;
-  let mockMovementRepo: jest.Mocked<IStockMovementRepository>;
+  let mockSaleRepo: Mock<ISaleRepository>;
+  let mockProductRepo: Mock<IProductRepository>;
+  let mockMovementRepo: Mock<IStockMovementRepository>;
 
   beforeEach(() => {
-    mockSaleRepo = { save: jest.fn() } as any;
-    mockProductRepo = { findById: jest.fn(), save: jest.fn() } as any;
-    mockMovementRepo = { save: jest.fn() } as any;
+    mockSaleRepo = { save: vi.fn() } as any;
+    mockProductRepo = { findById: vi.fn(), save: vi.fn() } as any;
+    mockMovementRepo = { save: vi.fn() } as any;
 
     useCase = new CreateSaleUseCase(mockSaleRepo, mockProductRepo, mockMovementRepo);
     

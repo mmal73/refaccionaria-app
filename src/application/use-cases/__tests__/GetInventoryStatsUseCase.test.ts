@@ -1,13 +1,13 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+import { describe, it, expect , vi, beforeEach } from 'vitest';
 import { GetInventoryStatsUseCase } from '../GetInventoryStatsUseCase';
 import type { IDashboardRepository, DashboardStats } from '../../../domain';
 
 describe('GetInventoryStatsUseCase', () => {
   let useCase: GetInventoryStatsUseCase;
-  let mockDashboardRepo: jest.Mocked<IDashboardRepository>;
+  let mockDashboardRepo: Mock<IDashboardRepository>;
 
   beforeEach(() => {
-    mockDashboardRepo = { getStats: jest.fn() } as any;
+    mockDashboardRepo = { getStats: vi.fn() } as any;
     useCase = new GetInventoryStatsUseCase(mockDashboardRepo);
   });
 

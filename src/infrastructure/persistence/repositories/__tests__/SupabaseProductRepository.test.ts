@@ -1,12 +1,14 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+import { describe, it, expect , vi, beforeEach } from 'vitest';
 import { SupabaseProductRepository } from '../SupabaseProductRepository';
 import { Product, Money } from '../../../../domain';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 // Mock the Supabase client module
-jest.mock('../../supabase/client', () => ({
-  getSupabaseClient: jest.fn(),
+vi.mock('../../supabase/client', () => ({
+  getSupabaseClient: vi.fn(),
 }));
+
+import { getSupabaseClient } from '../../supabase/client';
 
 describe('SupabaseProductRepository', () => {
   let repository: SupabaseProductRepository;
@@ -15,12 +17,11 @@ describe('SupabaseProductRepository', () => {
   beforeEach(() => {
     // Create mock Supabase client
     mockSupabase = {
-      from: jest.fn(),
+      from: vi.fn(),
     };
 
     // Mock the getSupabaseClient to return our mock
-    const { getSupabaseClient } = require('../../supabase/client');
-    (getSupabaseClient as jest.Mock).mockReturnValue(mockSupabase);
+    (getSupabaseClient as vi.Mock).mockReturnValue(mockSupabase);
 
     repository = new SupabaseProductRepository();
   });
@@ -38,7 +39,7 @@ describe('SupabaseProductRepository', () => {
         'https://example.com/image.jpg'
       );
 
-      const mockUpsert = jest.fn().mockResolvedValue({ error: null });
+      const mockUpsert = vi.fn().mockResolvedValue({ error: null });
       mockSupabase.from.mockReturnValue({
         upsert: mockUpsert,
       });
@@ -65,7 +66,7 @@ describe('SupabaseProductRepository', () => {
       const price = Money.create(100, 'MXN');
       const product = Product.create('prod-2', 'Product', price, 10);
 
-      const mockUpsert = jest.fn().mockResolvedValue({
+      const mockUpsert = vi.fn().mockResolvedValue({
         error: { message: 'Database error' },
       });
       mockSupabase.from.mockReturnValue({
@@ -81,7 +82,7 @@ describe('SupabaseProductRepository', () => {
       const price = Money.create(50, 'MXN');
       const product = Product.create('prod-3', 'Minimal Product', price, 5);
 
-      const mockUpsert = jest.fn().mockResolvedValue({ error: null });
+      const mockUpsert = vi.fn().mockResolvedValue({ error: null });
       mockSupabase.from.mockReturnValue({
         upsert: mockUpsert,
       });
@@ -115,13 +116,13 @@ describe('SupabaseProductRepository', () => {
         updated_at: new Date().toISOString(),
       };
 
-      const mockMaybeSingle = jest.fn().mockResolvedValue({
+      const mockMaybeSingle = vi.fn().mockResolvedValue({
         data: mockData,
         error: null,
       });
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
             maybeSingle: mockMaybeSingle,
           }),
         }),
@@ -138,13 +139,13 @@ describe('SupabaseProductRepository', () => {
     });
 
     it('should return null when product is not found', async () => {
-      const mockMaybeSingle = jest.fn().mockResolvedValue({
+      const mockMaybeSingle = vi.fn().mockResolvedValue({
         data: null,
         error: null,
       });
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
             maybeSingle: mockMaybeSingle,
           }),
         }),
@@ -156,13 +157,13 @@ describe('SupabaseProductRepository', () => {
     });
 
     it('should throw error when query fails', async () => {
-      const mockMaybeSingle = jest.fn().mockResolvedValue({
+      const mockMaybeSingle = vi.fn().mockResolvedValue({
         data: null,
         error: { message: 'Query error' },
       });
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
             maybeSingle: mockMaybeSingle,
           }),
         }),
@@ -187,13 +188,13 @@ describe('SupabaseProductRepository', () => {
         updated_at: new Date().toISOString(),
       };
 
-      const mockMaybeSingle = jest.fn().mockResolvedValue({
+      const mockMaybeSingle = vi.fn().mockResolvedValue({
         data: mockData,
         error: null,
       });
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
             maybeSingle: mockMaybeSingle,
           }),
         }),
@@ -209,13 +210,13 @@ describe('SupabaseProductRepository', () => {
 
   describe('exists', () => {
     it('should return true when product exists', async () => {
-      const mockMaybeSingle = jest.fn().mockResolvedValue({
+      const mockMaybeSingle = vi.fn().mockResolvedValue({
         data: { id: 'prod-1' },
         error: null,
       });
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
             maybeSingle: mockMaybeSingle,
           }),
         }),
@@ -227,13 +228,13 @@ describe('SupabaseProductRepository', () => {
     });
 
     it('should return false when product does not exist', async () => {
-      const mockMaybeSingle = jest.fn().mockResolvedValue({
+      const mockMaybeSingle = vi.fn().mockResolvedValue({
         data: null,
         error: null,
       });
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
             maybeSingle: mockMaybeSingle,
           }),
         }),
@@ -245,13 +246,13 @@ describe('SupabaseProductRepository', () => {
     });
 
     it('should throw error when exists check fails', async () => {
-      const mockMaybeSingle = jest.fn().mockResolvedValue({
+      const mockMaybeSingle = vi.fn().mockResolvedValue({
         data: null,
         error: { message: 'Database error' },
       });
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
             maybeSingle: mockMaybeSingle,
           }),
         }),
@@ -293,8 +294,8 @@ describe('SupabaseProductRepository', () => {
       ];
 
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          order: jest.fn().mockResolvedValue({
+        select: vi.fn().mockReturnValue({
+          order: vi.fn().mockResolvedValue({
             data: mockData,
             error: null,
           }),
@@ -310,8 +311,8 @@ describe('SupabaseProductRepository', () => {
 
     it('should return empty array when no products exist', async () => {
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          order: jest.fn().mockResolvedValue({
+        select: vi.fn().mockReturnValue({
+          order: vi.fn().mockResolvedValue({
             data: [],
             error: null,
           }),
@@ -327,8 +328,8 @@ describe('SupabaseProductRepository', () => {
   describe('delete', () => {
     it('should return true when product is deleted', async () => {
       mockSupabase.from.mockReturnValue({
-        delete: jest.fn().mockReturnValue({
-          eq: jest.fn().mockResolvedValue({
+        delete: vi.fn().mockReturnValue({
+          eq: vi.fn().mockResolvedValue({
             error: null,
             count: 1,
           }),
@@ -342,8 +343,8 @@ describe('SupabaseProductRepository', () => {
 
     it('should return false when product does not exist', async () => {
       mockSupabase.from.mockReturnValue({
-        delete: jest.fn().mockReturnValue({
-          eq: jest.fn().mockResolvedValue({
+        delete: vi.fn().mockReturnValue({
+          eq: vi.fn().mockResolvedValue({
             error: null,
             count: 0,
           }),
@@ -357,8 +358,8 @@ describe('SupabaseProductRepository', () => {
 
     it('should throw error when delete fails', async () => {
       mockSupabase.from.mockReturnValue({
-        delete: jest.fn().mockReturnValue({
-          eq: jest.fn().mockResolvedValue({
+        delete: vi.fn().mockReturnValue({
+          eq: vi.fn().mockResolvedValue({
             error: { message: 'Delete error' },
             count: null,
           }),
@@ -376,7 +377,7 @@ describe('SupabaseProductRepository', () => {
       const price = Money.create(50, 'USD');
       const product = Product.create('prod-usd', 'USD Product', price, 10);
 
-      const mockUpsert = jest.fn().mockResolvedValue({ error: null });
+      const mockUpsert = vi.fn().mockResolvedValue({ error: null });
       mockSupabase.from.mockReturnValue({
         upsert: mockUpsert,
       });
@@ -405,13 +406,13 @@ describe('SupabaseProductRepository', () => {
         updated_at: new Date().toISOString(),
       };
 
-      const mockMaybeSingle = jest.fn().mockResolvedValue({
+      const mockMaybeSingle = vi.fn().mockResolvedValue({
         data: mockData,
         error: null,
       });
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
             maybeSingle: mockMaybeSingle,
           }),
         }),
@@ -440,13 +441,13 @@ describe('SupabaseProductRepository', () => {
         updated_at: updatedDate.toISOString(),
       };
 
-      const mockMaybeSingle = jest.fn().mockResolvedValue({
+      const mockMaybeSingle = vi.fn().mockResolvedValue({
         data: mockData,
         error: null,
       });
       mockSupabase.from.mockReturnValue({
-        select: jest.fn().mockReturnValue({
-          eq: jest.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
             maybeSingle: mockMaybeSingle,
           }),
         }),

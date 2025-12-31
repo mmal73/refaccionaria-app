@@ -1,4 +1,4 @@
-import { describe, it, expect, jest, beforeEach, afterEach } from '@jest/globals';
+import { describe, it, expect , vi, beforeEach, afterEach } from 'vitest';
 import { CloudinaryImageService } from '../CloudinaryImageService';
 
 // Store original environment variables
@@ -6,7 +6,7 @@ const originalEnv = process.env;
 
 describe('CloudinaryImageService', () => {
   let service: CloudinaryImageService;
-  let mockFetch: jest.Mock;
+  let mockFetch: vi.Mock;
 
   beforeEach(() => {
     // Reset environment variables
@@ -17,7 +17,7 @@ describe('CloudinaryImageService', () => {
     };
 
     // Mock global fetch
-    mockFetch = jest.fn() as jest.Mock;
+    mockFetch = vi.fn() as vi.Mock;
     global.fetch = mockFetch;
 
     service = new CloudinaryImageService();
@@ -26,7 +26,7 @@ describe('CloudinaryImageService', () => {
   afterEach(() => {
     // Restore original environment
     process.env = originalEnv;
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Constructor validation', () => {
@@ -68,7 +68,7 @@ describe('CloudinaryImageService', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockResponse),
+        json: vi.fn().mockResolvedValue(mockResponse),
       });
 
       const result = await service.upload(mockFile);
@@ -106,7 +106,7 @@ describe('CloudinaryImageService', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockResponse),
+        json: vi.fn().mockResolvedValue(mockResponse),
       });
 
       const result = await service.upload(mockFile, {
@@ -148,7 +148,7 @@ describe('CloudinaryImageService', () => {
       mockFetch.mockResolvedValue({
         ok: false,
         statusText: 'Bad Request',
-        json: jest.fn().mockResolvedValue({
+        json: vi.fn().mockResolvedValue({
           error: { message: 'Invalid image format' },
         }),
       });
@@ -172,7 +172,7 @@ describe('CloudinaryImageService', () => {
       mockFetch.mockResolvedValue({
         ok: false,
         statusText: 'Internal Server Error',
-        json: jest.fn().mockRejectedValue(new Error('Invalid JSON')),
+        json: vi.fn().mockRejectedValue(new Error('Invalid JSON')),
       });
 
       await expect(service.upload(mockFile)).rejects.toThrow(
@@ -195,7 +195,7 @@ describe('CloudinaryImageService', () => {
       for (const type of imageTypes) {
         mockFetch.mockResolvedValue({
           ok: true,
-          json: jest.fn().mockResolvedValue(mockResponse),
+          json: vi.fn().mockResolvedValue(mockResponse),
         });
 
         const mockFile = new File(['test'], `test.${type.split('/')[1]}`, { type });
@@ -329,7 +329,7 @@ describe('CloudinaryImageService', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockResponse),
+        json: vi.fn().mockResolvedValue(mockResponse),
       });
 
       const result = await service.upload(mockFile);
@@ -355,7 +355,7 @@ describe('CloudinaryImageService', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockResponse),
+        json: vi.fn().mockResolvedValue(mockResponse),
       });
 
       await expect(service.upload(mockFile)).resolves.toBeDefined();

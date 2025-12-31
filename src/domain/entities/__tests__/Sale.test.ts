@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { Sale } from '../Sale';
 import { SaleItem } from '../SaleItem';
 import { Money } from '../../value-objects/Money';
