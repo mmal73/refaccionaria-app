@@ -121,67 +121,67 @@ describe('Product Entity', () => {
       product = Product.create('prod-1', 'Test Product', price, 20);
     });
 
-    describe('increaseStock', () => {
-      it('should increase stock by the specified quantity', () => {
-        product.increaseStock(10);
+    describe('addStock', () => {
+      it('should add stock by the specified quantity', () => {
+        product.addStock(10);
         expect(product.stock).toBe(30);
       });
 
       it('should throw error when quantity is zero', () => {
         expect(() => {
-          product.increaseStock(0);
-        }).toThrow('La cantidad a incrementar debe ser mayor a 0');
+          product.addStock(0);
+        }).toThrow('La cantidad a agregar debe ser mayor a cero');
       });
 
       it('should throw error when quantity is negative', () => {
         expect(() => {
-          product.increaseStock(-5);
-        }).toThrow('La cantidad a incrementar debe ser mayor a 0');
+          product.addStock(-5);
+        }).toThrow('La cantidad a agregar debe ser mayor a cero');
       });
 
       it('should update the updatedAt timestamp', () => {
         const originalUpdatedAt = product.updatedAt;
         // Wait a bit to ensure timestamp difference
         setTimeout(() => {
-          product.increaseStock(5);
+          product.addStock(5);
           expect(product.updatedAt.getTime()).toBeGreaterThan(originalUpdatedAt.getTime());
         }, 10);
       });
     });
 
-    describe('decreaseStock', () => {
-      it('should decrease stock by the specified quantity', () => {
-        product.decreaseStock(5);
+    describe('removeStock', () => {
+      it('should remove stock by the specified quantity', () => {
+        product.removeStock(5);
         expect(product.stock).toBe(15);
       });
 
       it('should allow decreasing to zero', () => {
-        product.decreaseStock(20);
+        product.removeStock(20);
         expect(product.stock).toBe(0);
       });
 
       it('should throw error when quantity is zero', () => {
         expect(() => {
-          product.decreaseStock(0);
-        }).toThrow('La cantidad a decrementar debe ser mayor a 0');
+          product.removeStock(0);
+        }).toThrow('La cantidad a retirar debe ser mayor a cero');
       });
 
       it('should throw error when quantity is negative', () => {
         expect(() => {
-          product.decreaseStock(-5);
-        }).toThrow('La cantidad a decrementar debe ser mayor a 0');
+          product.removeStock(-5);
+        }).toThrow('La cantidad a retirar debe ser mayor a cero');
       });
 
       it('should throw error when quantity exceeds available stock', () => {
         expect(() => {
-          product.decreaseStock(25);
-        }).toThrow('Stock insuficiente. Disponible: 20, Solicitado: 25');
+          product.removeStock(25);
+        }).toThrow('Stock insuficiente. Disponible: 20, Requerido: 25');
       });
 
       it('should update the updatedAt timestamp', () => {
         const originalUpdatedAt = product.updatedAt;
         setTimeout(() => {
-          product.decreaseStock(5);
+          product.removeStock(5);
           expect(product.updatedAt.getTime()).toBeGreaterThan(originalUpdatedAt.getTime());
         }, 10);
       });
@@ -223,27 +223,27 @@ describe('Product Entity', () => {
     });
 
     describe('Multiple Stock Operations', () => {
-      it('should handle multiple increase operations', () => {
-        product.increaseStock(5);
-        product.increaseStock(10);
-        product.increaseStock(3);
+      it('should handle multiple add operations', () => {
+        product.addStock(5);
+        product.addStock(10);
+        product.addStock(3);
         
         expect(product.stock).toBe(38);
       });
 
-      it('should handle multiple decrease operations', () => {
-        product.decreaseStock(5);
-        product.decreaseStock(3);
-        product.decreaseStock(2);
+      it('should handle multiple remove operations', () => {
+        product.removeStock(5);
+        product.removeStock(3);
+        product.removeStock(2);
         
         expect(product.stock).toBe(10);
       });
 
-      it('should handle mixed increase and decrease operations', () => {
-        product.increaseStock(10);
-        product.decreaseStock(5);
-        product.increaseStock(15);
-        product.decreaseStock(8);
+      it('should handle mixed add and remove operations', () => {
+        product.addStock(10);
+        product.removeStock(5);
+        product.addStock(15);
+        product.removeStock(8);
         
         expect(product.stock).toBe(32);
       });
