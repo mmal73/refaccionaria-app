@@ -130,14 +130,13 @@ export class SupabaseProductRepository implements IProductRepository {
   }
 
   /**
-   * Busca productos con stock bajo (menos de 10 unidades)
+   * Busca productos con stock bajo
    */
-  async findLowStock(): Promise<Product[]> {
+  async findLowStock(threshold: number = 10): Promise<Product[]> {
     const { data, error } = await this.supabase
       .from('products')
       .select('*')
-      .gt('stock', 0)
-      .lt('stock', 10)
+      .lte('stock', threshold)
       .order('stock', { ascending: true });
 
     if (error) {
@@ -159,6 +158,23 @@ export class SupabaseProductRepository implements IProductRepository {
 
     if (error) {
       throw new Error(`Error al buscar productos agotados: ${error.message}`);
+    }
+
+    return data.map((row: Database['public']['Tables']['products']['Row']) => this.rowToProduct(row));
+  }
+
+  /**
+   * Busca productos por nombre o descripción (búsqueda parcial general)
+   */
+  async search(query: string): Promise<Product[]> {
+    const { data, error } = await this.supabase
+      .from('products')
+      .select('*')
+      .or(`name.ilike.%${query}%,description.ilike.%${query}%`)
+      .order('name', { ascending: true });
+
+    if (error) {
+      throw new Error(`Error al buscar productos: ${error.message}`);
     }
 
     return data.map((row: Database['public']['Tables']['products']['Row']) => this.rowToProduct(row));

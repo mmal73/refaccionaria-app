@@ -39,11 +39,12 @@ export interface IProductRepository {
   findByCategory(category: string): Promise<Product[]>;
 
   /**
-   * Busca productos con stock bajo (menos de 10 unidades)
+   * Busca productos con stock bajo
+   * @param threshold - Umbral de stock (por defecto 10)
    * @returns Array de productos con stock bajo
    * @throws Error si falla la operación
    */
-  findLowStock(): Promise<Product[]>;
+  findLowStock(threshold: number): Promise<Product[]>;
 
   /**
    * Busca productos agotados (stock = 0)
@@ -53,7 +54,15 @@ export interface IProductRepository {
   findOutOfStock(): Promise<Product[]>;
 
   /**
-   * Busca productos por nombre (búsqueda parcial)
+   * Busca productos por nombre o descripción (búsqueda parcial general)
+   * @param query - Término de búsqueda
+   * @returns Array de productos que coinciden
+   * @throws Error si falla la operación
+   */
+  search(query: string): Promise<Product[]>;
+
+  /**
+   * Busca productos por nombre (búsqueda parcial específica por nombre)
    * @param name - Nombre o parte del nombre a buscar
    * @returns Array de productos que coinciden
    * @throws Error si falla la operación

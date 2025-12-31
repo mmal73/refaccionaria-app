@@ -17,6 +17,9 @@ export { ProductMapper } from './mappers';
 export {
   CreateProductUseCase,
   GetProductByIdUseCase,
+  GetAllProductsUseCase,
+  SearchProductsUseCase,
   UpdateStockUseCase,
   GetLowStockProductsUseCase,
+  GetStockMovementsUseCase,
 } from './use-cases';

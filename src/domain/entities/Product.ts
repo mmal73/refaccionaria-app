@@ -202,29 +202,29 @@ export class Product {
   }
 
   /**
-   * Incrementa el stock del producto
-   * @throws Error si la cantidad es negativa o cero
+   * Agrega cantidad al stock actual
+   * @param quantity - Cantidad a sumar (debe ser positiva)
    */
-  increaseStock(quantity: number): void {
+  addStock(quantity: number): void {
     if (quantity <= 0) {
-      throw new Error('La cantidad a incrementar debe ser mayor a 0');
+      throw new Error('La cantidad a agregar debe ser mayor a cero');
     }
-
     this._stock += quantity;
     this._updatedAt = new Date();
   }
 
   /**
-   * Decrementa el stock del producto
-   * @throws Error si la cantidad es negativa, cero, o excede el stock disponible
+   * Resta cantidad al stock actual
+   * @param quantity - Cantidad a restar (debe ser positiva)
+   * @throws Error si no hay suficiente stock
    */
-  decreaseStock(quantity: number): void {
+  removeStock(quantity: number): void {
     if (quantity <= 0) {
-      throw new Error('La cantidad a decrementar debe ser mayor a 0');
+      throw new Error('La cantidad a retirar debe ser mayor a cero');
     }
-
-    if (quantity > this._stock) {
-      throw new Error(`Stock insuficiente. Disponible: ${this._stock}, Solicitado: ${quantity}`);
+    
+    if (this._stock < quantity) {
+      throw new Error(`Stock insuficiente. Disponible: ${this._stock}, Requerido: ${quantity}`);
     }
 
     this._stock -= quantity;

@@ -1,16 +1,20 @@
 /**
  * Domain Layer - Barrel Export
- * Exporta todas las entidades, value objects y repositorios del dominio
  */
 
 // Entities
-export { Product } from './entities/Product';
+export * from './entities/Product';
+export * from './entities/StockMovement';
 
 // Value Objects
-export { Money } from './value-objects/Money';
+export * from './value-objects/Money';
 
-// Repository Interfaces
-export type { IProductRepository } from './repositories/IProductRepository';
+// Enums
+export * from './enums/StockMovementType';
 
-// Service Interfaces
-export type { IImageService, UploadImageOptions, UploadImageResult } from './services';
+// Repositories (Interfaces)
+export * from './repositories/IProductRepository';
+export * from './repositories/IStockMovementRepository';
+
+// Services (Interfaces)
+export * from './services/IImageService';
